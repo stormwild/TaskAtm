@@ -8,5 +8,6 @@ namespace TaskAtm.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public virtual Account Account { get; set; }
     }
 }
