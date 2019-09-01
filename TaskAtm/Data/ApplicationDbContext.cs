@@ -17,5 +17,27 @@ namespace TaskAtm.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        // protected override void OnModelCreating(ModelBuilder builder) {
+        //     base.OnModelCreating(builder);
+        //     // builder.Entity<Account>().HasData(new Account
+        //     // {
+        //     //     Id = 1,
+        //     //     Balance = 100,
+        //     //     UserId = "971d3327-c4c8-44bf-940c-be3ee9ef4f97"
+        //     // });
+
+        //     // builder.Entity<Transaction>().HasData(new Transaction
+        //     // {
+        //     //     Id = 1,
+        //     //     Amount = 100.00,
+        //     //     Created = DateTime.UtcNow,
+        //     //     Updated = DateTime.UtcNow,
+        //     //     AccountId = 1
+        //     // });
+        // }
+
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

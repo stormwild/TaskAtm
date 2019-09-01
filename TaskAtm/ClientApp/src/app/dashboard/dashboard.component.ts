@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AccountService } from '../services/account.service';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { IAccount } from '../models/iaccount';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,11 +12,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  public balance = 0;
+  public email: string;
+  public account: IAccount;
 
-  constructor() { }
+  constructor(private accountService: AccountService, private authorizeService: AuthorizeService) {  }
 
   ngOnInit() {
+    this.loadAccount();
+  }
+
+  loadAccount() {
+    this.authorizeService.getUser().pipe(map(u => u && u.name)).subscribe((data) => {
+      this.email = data;
+    });
+
+    this.accountService.getAccount(1).subscribe((result: IAccount) => {
+      this.account = result;
+    });
   }
 
 }
+
+
+

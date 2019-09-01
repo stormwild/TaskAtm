@@ -1,3 +1,49 @@
 <h1>Dashboard</h1>
 
-<p>Displays the current balance: {{ balance }}</p>
+<p>Email: {{ email }}</p>
+
+<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <th>Id</th>
+      <td>{{ account?.id }}</td>
+    </tr>
+    <tr>
+      <th>Balance</th>
+      <td>{{ account?.balance}}</td>
+    </tr>
+    <tr>
+      <th>Transactions</th>
+      <td>
+        <table class="table table-bordered" *ngFor="let transaction of account?.transactions">
+          <tbody>
+            <tr>
+              <th>Id</th>
+              <td>{{ transaction.id }}</td>
+            </tr>
+            <tr>
+              <th>Amount</th>
+              <td>{{ transaction.amount }}</td>
+            </tr>
+            <tr>
+              <th>TransactionType</th>
+              <td>{{ transaction.transactionType }}</td>
+            </tr>
+            <tr>
+              <th>AccountType</th>
+              <td>{{ transaction.accountType }}</td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td>{{ transaction.created + 'Z' | date: 'long' }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ transaction.updated + 'Z' | date: 'long' }}</td>
+              </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskAtm.Data;
 
 namespace TaskAtm.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190830220118_AccountAddUserId")]
+    partial class AccountAddUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,14 +243,6 @@ namespace TaskAtm.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Balance = 100m,
-                            UserId = "971d3327-c4c8-44bf-940c-be3ee9ef4f97"
-                        });
                 });
 
             modelBuilder.Entity("TaskAtm.Models.ApplicationUser", b =>
@@ -338,16 +332,6 @@ namespace TaskAtm.Data.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("Transactions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccountId = 1,
-                            Amount = 100.0,
-                            Created = new DateTime(2019, 9, 1, 4, 57, 6, 363, DateTimeKind.Utc).AddTicks(6770),
-                            Updated = new DateTime(2019, 9, 1, 4, 57, 6, 363, DateTimeKind.Utc).AddTicks(7370)
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
