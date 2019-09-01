@@ -14,3 +14,12 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* .form-control.ng-invalid {
+  border-color: #dc3545 !important;
+  background-image: none;
+} */
