@@ -39,6 +39,13 @@ cd ..
 dotnet run
 ```
 
+## Login Info
+
+```
+Username/Email: artorrijos@gmail.com
+Password: MyPassword_123#
+```
+
 ## Demo
 
 ![](TaskAtm/docs/localhost_5001_dashboard.png)
