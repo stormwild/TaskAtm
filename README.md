@@ -41,6 +41,8 @@ dotnet run
 
 ## Login Info
 
+Application does not create a new account for newly registered users and the code is hard coded to use only the existing account with id 1 so please use the existing account to see the working demo.
+
 ```
 Username/Email: artorrijos@gmail.com
 Password: MyPassword_123#
