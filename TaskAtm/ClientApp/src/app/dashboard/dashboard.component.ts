@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
     this.form = this.fb.group({
       amount: [0.00, Validators.compose([
         Validators.required,
+        Validators.min(.01),
         Validators.pattern(/^\d+(\.\d{1,2})?$/)
       ])],
       transactionType: ['DEBIT'],
@@ -52,13 +53,20 @@ export class DashboardComponent implements OnInit {
   }
 
   onSubmit(value: ITransaction) {
-    if (!this.form.invalid) {
+    if (!this.form.invalid && this.validTransaction(value, this.account)) {
       this.accountService.addTransaction(value).pipe(
         mergeMap((result) => this.accountService.getAccount(1))
       ).subscribe((account: IAccount) => {
         this.account = account;
+        this.form.setValidators(appTransactionTypeValidator(this.account.balance));
+        this.form.updateValueAndValidity();
       });
     }
+  }
+
+  validTransaction(transaction: ITransaction, account: IAccount) {
+    console.log(transaction.transactionType === 'DEBIT' || (transaction.transactionType === 'CREDIT' && transaction.amount <= account.balance));
+    return transaction.transactionType === 'DEBIT' || (transaction.transactionType === 'CREDIT' && transaction.amount <= account.balance);
   }
 
   get amount() { return this.form.get('amount'); }

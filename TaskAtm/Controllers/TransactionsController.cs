@@ -83,6 +83,15 @@ namespace TaskAtm.Controllers
                 return BadRequest(ModelState);
             }
 
+            var account = _context.Accounts.Find(transaction.AccountId);
+            await _context.Entry(account).Collection(a => a.Transactions).LoadAsync();
+            account.UpdateBalance();
+
+            if(transaction.TransactionType.Equals("CREDIT") && Convert.ToDecimal(transaction.Amount) > account.Balance) {
+                ModelState.AddModelError("TransactionError", "Credit amount exceeds current balance");
+                return BadRequest(ModelState);
+            }
+
             using (var trxn = _context.Database.BeginTransaction())
             {
                 try
@@ -93,9 +102,9 @@ namespace TaskAtm.Controllers
                     _context.Transactions.Add(transaction);
                     await _context.SaveChangesAsync();
 
-                    var account = _context.Accounts.Find(transaction.AccountId);
+                    account = _context.Accounts.Find(transaction.AccountId);
                     await _context.Entry(account).Collection(a => a.Transactions).LoadAsync();
-                    
+
                     account.UpdateBalance();
                     await _context.SaveChangesAsync();
 
