@@ -4,81 +4,84 @@
 
 <div class="row">
   <div class="col">
-      <div class="card mb-3">
-          <div class="card-body">
-            <p>Form is invalid: {{ form.invalid && (form.dirty || form.touched) }}</p>
-              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label for="amount" class="sr-only">Amount</label>
-                    <input type="text" class="form-control" id="amount" placeholder="0.00" formControlName="amount" pattern="^\d+(\.\d{1,2})?$">
-                    <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger">
-                        <ul class="pt-1">
-                            <li *ngIf="amount.errors.required">Amount is required.</li>
-                            <li *ngIf="amount.errors.pattern">Amount must be a valid money amount (round 2 decimal places).</li>
-                        </ul>
-                    </div>
-                  </div>
-                  <div class="form-check form-check-inline mx-sm-3 mb-2 cursor-pointer">
-                    <input class="form-check-input" type="radio" name="transactionType" id="debit" value="DEBIT" checked>
-                    <label class="form-check-label cursor-pointer" for="debit">Debit</label>
-                  </div>
-                  <div class="form-check form-check-inline mx-sm-3 mb-2">
-                    <input class="form-check-input" type="radio" name="transactionType" id="credit" value="CREDIT">
-                    <label class="form-check-label cursor-pointer" for="credit">Credit</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                      <button type="submit" class="btn btn-block btn-primary mb-2" [disabled]="!form.valid">Submit</button>
-                  </div>
-                </form>
+    <div class="card mb-3">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" novalidate>
+          <div class="form-group">
+              <div *ngIf="form.errors?.appTransactionTypeValidator && (form.touched || form.dirty)" class="cross-validation-error-message alert alert-danger">
+                  Cannot credit more than current balance
+              </div>
           </div>
-        </div>
+          <div class="form-group mx-sm-3 mb-2">
+            <label for="amount" class="sr-only">Amount</label>
+            <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount">
+            <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger">
+              <ul class="pt-1">
+                <li *ngIf="amount.errors.required">Amount is required.</li>
+                <li *ngIf="amount.errors.pattern">Amount must be a valid money amount (round 2 decimal places).</li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-check form-check-inline mx-sm-3 mb-2 cursor-pointer">
+            <input class="form-check-input" type="radio" formControlName="transactionType" id="debit" value="DEBIT" [checked]="transactionType.value === 'DEBIT'">
+            <label class="form-check-label cursor-pointer" for="debit">Debit</label>
+          </div>
+          <div class="form-check form-check-inline mx-sm-3 mb-2">
+            <input class="form-check-input" type="radio" formControlName="transactionType" id="credit" value="CREDIT" [checked]="transactionType.value === 'CREDIT'">
+            <label class="form-check-label cursor-pointer" for="credit">Credit</label>
+          </div>
+          <div class="form-group mx-sm-3 mb-2">
+            <button type="submit" class="btn btn-block btn-primary mb-2" [disabled]="!form.valid">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
   <div class="col">
-      <table class="table table-bordered">
-          <tbody>
-            <tr>
-              <th>Id</th>
-              <td>{{ account?.id }}</td>
-            </tr>
-            <tr>
-              <th>Balance</th>
-              <td>{{ account?.balance}}</td>
-            </tr>
-            <tr>
-              <th>Transactions</th>
-              <td>
-                <table class="table table-bordered" *ngFor="let transaction of account?.transactions">
-                  <tbody>
-                    <tr>
-                      <th>Id</th>
-                      <td>{{ transaction.id }}</td>
-                    </tr>
-                    <tr>
-                      <th>Amount</th>
-                      <td>{{ transaction.amount }}</td>
-                    </tr>
-                    <tr>
-                      <th>TransactionType</th>
-                      <td>{{ transaction.transactionType }}</td>
-                    </tr>
-                    <tr>
-                      <th>AccountType</th>
-                      <td>{{ transaction.accountType }}</td>
-                    </tr>
-                    <tr>
-                      <th>Created</th>
-                      <td>{{ transaction.created + 'Z' | date: 'long' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Updated</th>
-                        <td>{{ transaction.updated + 'Z' | date: 'long' }}</td>
-                      </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th>Id</th>
+          <td>{{ account?.id }}</td>
+        </tr>
+        <tr>
+          <th>Balance</th>
+          <td>{{ account?.balance}}</td>
+        </tr>
+        <tr>
+          <th>Transactions</th>
+          <td>
+            <table class="table table-bordered" *ngFor="let transaction of account?.transactions">
+              <tbody>
+                <tr>
+                  <th>Id</th>
+                  <td>{{ transaction.id }}</td>
+                </tr>
+                <tr>
+                  <th>Amount</th>
+                  <td>{{ transaction.amount }}</td>
+                </tr>
+                <tr>
+                  <th>TransactionType</th>
+                  <td>{{ transaction.transactionType }}</td>
+                </tr>
+                <tr>
+                  <th>AccountType</th>
+                  <td>{{ transaction.accountType }}</td>
+                </tr>
+                <tr>
+                  <th>Created</th>
+                  <td>{{ transaction.created + 'Z' | date: 'long' }}</td>
+                </tr>
+                <tr>
+                  <th>Updated</th>
+                  <td>{{ transaction.updated + 'Z' | date: 'long' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-

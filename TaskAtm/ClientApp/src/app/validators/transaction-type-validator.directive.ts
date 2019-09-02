@@ -5,7 +5,6 @@ export function appTransactionTypeValidator(balance: number): ValidatorFn {
   return (fg: FormGroup): ValidationErrors | null => {
     const amount = fg.get('amount');
     const transactionType = fg.get('transactionType');
-
     return amount.value > balance && transactionType.value === 'CREDIT' ? { 'appTransactionTypeValidator': true } : null;
   };
 }
@@ -21,5 +20,4 @@ export class TransactionTypeValidatorDirective implements Validator {
   validate(control: AbstractControl): {[key: string]: any} | null {
     return this.balance ? appTransactionTypeValidator(this.balance)(control) : null;
   }
-
 }

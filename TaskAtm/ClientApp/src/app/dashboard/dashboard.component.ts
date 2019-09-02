@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { AccountService } from '../services/account.service';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { IAccount } from '../models/iaccount';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { appTransactionTypeValidator } from '../validators/transaction-type-validator.directive';
+import { ITransaction } from '../models/itransaction';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class DashboardComponent implements OnInit {
         Validators.required,
         Validators.pattern(/^\d+(\.\d{1,2})?$/)
       ])],
-      transactionType: ['DEBIT']
+      transactionType: ['DEBIT'],
+      accountType: ['CASH_ON_HAND'],
     });
   }
 
@@ -45,15 +47,22 @@ export class DashboardComponent implements OnInit {
     this.accountService.getAccount(1).subscribe((result: IAccount) => {
       this.account = result;
       this.form.setValidators(appTransactionTypeValidator(this.account.balance));
+      this.form.addControl('accountId', new FormControl(this.account.id));
     });
   }
 
-  onSubmit() {
-
+  onSubmit(value: ITransaction) {
+    if (!this.form.invalid) {
+      this.accountService.addTransaction(value).pipe(
+        mergeMap((result) => this.accountService.getAccount(1))
+      ).subscribe((account: IAccount) => {
+        this.account = account;
+      });
+    }
   }
 
   get amount() { return this.form.get('amount'); }
-
+  get transactionType() { return this.form.get('transactionType'); }
 }
 
 

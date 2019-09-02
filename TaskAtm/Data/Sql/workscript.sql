@@ -1,7 +1,10 @@
 -- SQLite
-SELECT * FROM AspNetUsers;
+-- SELECT * FROM AspNetUsers;
 
-SELECT * FROM Accounts;
+SELECT a.Id, a.Balance, t.Amount, t.TransactionType, t.AccountType 
+FROM Accounts a
+INNER JOIN Transactions t
+ON a.Id = t.AccountId;
 
-SELECT * FROM Transactions;
+-- SELECT * FROM Transactions;
 
